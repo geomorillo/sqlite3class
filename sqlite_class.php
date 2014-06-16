@@ -117,7 +117,7 @@ class DB extends SQLite3 {
                         $where_arr[$i] = "$key  ='$value'";
                         $i++;
                     }
-                    $where = "WHERE " . implode(" AND ", $where_arr);
+                    $where = "WHERE " . implode(" AND ", $where_arr);// OR NOT SUPPORTED YET
                 }
             }
 
@@ -130,7 +130,7 @@ class DB extends SQLite3 {
     }
 
     /**
-     * 
+     * Update a record with an array
      * @param array $args example: array {
      *                                      "TABLE" => "table-name",
      *                                      "ROWS"  => array(col-name => value, col-name =>value ),
@@ -139,6 +139,7 @@ class DB extends SQLite3 {
      */
     function Update($args) {
         if (is_array($args)) {
+            $where = "";
             if ($args["TABLE"] != '') {
                 $table = $args["TABLE"];
             }
@@ -168,7 +169,7 @@ class DB extends SQLite3 {
             $query = "UPDATE $table $rows $where";
             $ret = $this->query($query);
             return $ret->fetchArray(SQLITE3_ASSOC);
-        }else{
+        } else {
             return FALSE;
         }
         //TODAVIA NO IMPLEMENTADO
@@ -176,16 +177,53 @@ class DB extends SQLite3 {
         //UPDATE $table SET column-name = "value", column-name="value" WHERE column-name = "value"
     }
 
+    /**
+     * Deletes a record with an array 
+     * @param array $args example: array(
+     *                                   "TABLE" => "tablename",
+     *                                   "WHERE" => array("rowname"=>value) //only 1 element allowed
+     *                             );
+     *                                  
+     *                                          
+     */
     function Delete($args) {
-        //TODAVIA NO IMPLEMENTADO
+        //WHERE ES OPCIONAL, SI NO SE DEFINE SE BORRAN TODOS LOS DATOS DE LA TABLA
+        //DELETE FROM table_name WHERE [condition];
+        if (is_array($args)) {
+            $where = "";
+            if ($args["TABLE"] != '') {
+                $table = $args["TABLE"];
+            }
+            if (isset($args["WHERE"]) && $args["WHERE"] != '') {
+
+                if (is_array($args["WHERE"])) {
+                    $where_arr = [];
+                    $i = 0;
+                    foreach ($args["WHERE"] as $key => $value) {
+                        $where_arr[$i] = "$key  ='$value'";
+                        $i++;
+                    }
+                    $where = "WHERE " . $where_arr[0]; //only 1 where allowed
+                }
+            }
+             $query = "DELETE FROM $table $where";
+            $this->query($query);
+        }else{
+            return FALSE;
+        }
     }
 
     function Count($result) {
         // TODAVIA NO IMPLEMENTADO
-//        $rows = $result->fetchArray();
-//         if ($rows != false) {
-//            return count($rows);
-//        }
+    }
+    /**
+     * Drops a table from the current database
+     * @param string $tableName
+     */
+    function DropTable($tableName){
+        //DROP TABLE database_name.table_name;
+        $query = "DROP TABLE $tableName";
+        $this->exec($query);   
     }
 
     /*
