@@ -46,6 +46,10 @@ $values = array(
 );<br>
 $rows = $db->Select($values); // here it returns an array with the selected rows<br>
 
-$db->close(); // finally close the database
-
 ```
+if you want to show the tables in database
+```
+$db->showTables();
+$db->close(); // finally close the database
+```
+
