@@ -27,12 +27,12 @@ $db->CreateTable($values);
 ```
 easily insert data with an array <br>
 ```
-$fields = array( <br>
-    "id" => 1, <br>
-    "oro" => 100, <br>
-    "plata" => 0, <br>
-    "cobre" => 0 <br>
-);<br>
+$fields = array( 
+    "id" => 1, 
+    "oro" => 100, 
+    "plata" => 0, 
+    "cobre" => 0 
+);
 
 $db->Insert("jugadores", $fields); 
 ```
