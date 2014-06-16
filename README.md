@@ -14,19 +14,19 @@ to create a db <br>
 <code> $db = new DB("mydb.db"); // you can use txt or db as extension</code>
 
 to create a table use an array here is an example <br>
-<code>
-$values = array( <br>
-    "TABLE" => "jugadores", // table name <br>
-    "id" => "INTEGER PRIMARY KEY", <br>
-    "oro" => "INTEGER(11)", <br>
-    "plata" => "INTEGER(11)", <br>
-    "cobre" => "INTEGER(11)" <br>
-); <br>
+```
+$values = array( 
+    "TABLE" => "jugadores", // table name 
+    "id" => "INTEGER PRIMARY KEY",
+    "oro" => "INTEGER(11)", 
+    "plata" => "INTEGER(11)", 
+    "cobre" => "INTEGER(11)" 
+); 
 
 $db->CreateTable($values);
-</code>
+```
 easily insert data with an array <br>
-<code>
+```
 $fields = array( <br>
     "id" => 1, <br>
     "oro" => 100, <br>
@@ -34,18 +34,18 @@ $fields = array( <br>
     "cobre" => 0 <br>
 );<br>
 
-$db->Insert("jugadores", $fields); <br>
-</code>
+$db->Insert("jugadores", $fields); 
+```
 selecting data use an array <br>
-<code>
-$values = array(<br>
-    "ROWS" => "*", //row names<br>
-    "TABLE" => "jugadores",<br>
-    "WHERE" => array("oro" => 100, "plata" => 0), //use an array for more than 1, here is the sql: WHERE oro = 100 AND plata = 0<br>
-    "ORDER" => "id"<br>
+```
+$values = array(
+    "ROWS" => "*", //row names
+    "TABLE" => "jugadores",
+    "WHERE" => array("oro" => 100, "plata" => 0), //use an array for more than 1, here is the sql: WHERE oro = 100 AND plata = 0
+    "ORDER" => "id"
 );<br>
 $rows = $db->Select($values); // here it returns an array with the selected rows<br>
 
-$db->close(); // finally close the database<br>
+$db->close(); // finally close the database
 
-</code>
+```
