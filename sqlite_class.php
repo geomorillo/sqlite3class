@@ -7,9 +7,9 @@ class DB extends SQLite3 {
 
     public function __construct($dbase = "") {
         $this->lang = ""; //change  to en for language support
-        if($dbase!=""){
+        if ($dbase != "") {
             $this->crearDb($dbase);
-        }else{
+        } else {
             //base de datos no definida se crea una por defecto
             $this->crearDb("default.db");
         }
@@ -58,12 +58,12 @@ class DB extends SQLite3 {
         }
     }
 
-   /**
-    * Inserta datos usando un array
-    * @param string $table
-    * @param array $fields
-    * @return type
-    */
+    /**
+     * Inserta datos usando un array
+     * @param string $table
+     * @param array $fields
+     * @return type
+     */
     function Insert($table, $fields) {
         if (is_array($fields)) {
             foreach ($fields as $rows => $values) {
@@ -83,15 +83,15 @@ class DB extends SQLite3 {
         return $insert;
     }
 
-/**
- * Select a table using an array as argument
- * @param array $args values = array(    
- *                                  "ROWS"     => "nombre, email, password",
- *                                  "TABLE"    => "usuarios",
-/*                                  "WHERE"   => array("col1"=>"value","col2"=>value), //if array >1 se concatena con AND
-/*                                  "ORDER"    => "email ASC" );   
- * @return array 
- */
+    /**
+     * Select a table using an array as argument
+     * @param array $args values = array(    
+     *                                  "ROWS"     => "nombre, email, password",
+     *                                  "TABLE"    => "usuarios",
+      /*                                  "WHERE"   => array("col1"=>"value","col2"=>value), //if array >1 se concatena con AND
+      /*                                  "ORDER"    => "email ASC" );
+     * @return array 
+     */
     function Select($args) {
         if (is_array($args)) {
             $rows = '';
@@ -103,15 +103,15 @@ class DB extends SQLite3 {
             if (isset($args["ORDER"]) && $args["ORDER"] != '') {
                 $order = "ORDER BY " . $args["ORDER"];    /////  tambien se puede usar "ORDER"=>"name ASC"
             }
-             if ($args["TABLE"] != '') {
-                 $table = $args["TABLE"];
-             }
-            
+            if ($args["TABLE"] != '') {
+                $table = $args["TABLE"];
+            }
+
             if (isset($args["WHERE"]) && $args["WHERE"] != '') {
-               
+
                 if (is_array($args["WHERE"])) {
                     $where_arr = [];
-                    
+
                     $i = 0;
                     foreach ($args["WHERE"] as $key => $value) {
                         $where_arr[$i] = "$key  ='$value'";
@@ -123,31 +123,72 @@ class DB extends SQLite3 {
 
             $query = "SELECT $rows FROM $table $where $order";
             $ret = $this->query($query);
-            return $ret->fetchArray(SQLITE3_ASSOC) ;
-            
+            return $ret->fetchArray(SQLITE3_ASSOC);
         } else {
             return false; //NO EJECUTADA
         }
     }
-    
-    function Update($args){
+
+    /**
+     * 
+     * @param array $args example: array {
+     *                                      "TABLE" => "table-name",
+     *                                      "ROWS"  => array(col-name => value, col-name =>value ),
+     *                                      "WHERE" => array(col-name => value, col-name =>value )
+     *                                   }
+     */
+    function Update($args) {
+        if (is_array($args)) {
+            if ($args["TABLE"] != '') {
+                $table = $args["TABLE"];
+            }
+            if (is_array($args["ROWS"])) {
+                $rows_arr = [];
+
+                $i = 0;
+                foreach ($args["ROWS"] as $key => $value) {
+                    $rows_arr[$i] = "$key  ='$value'";
+                    $i++;
+                }
+                $rows = "SET " . implode(", ", $rows_arr);
+            }
+            if (isset($args["WHERE"]) && $args["WHERE"] != '') {
+
+                if (is_array($args["WHERE"])) {
+                    $where_arr = [];
+
+                    $i = 0;
+                    foreach ($args["WHERE"] as $key => $value) {
+                        $where_arr[$i] = "$key  ='$value'";
+                        $i++;
+                    }
+                    $where = "WHERE " . implode(" AND ", $where_arr);
+                }
+            }
+            $query = "UPDATE $table $rows $where";
+            $ret = $this->query($query);
+            return $ret->fetchArray(SQLITE3_ASSOC);
+        }else{
+            return FALSE;
+        }
         //TODAVIA NO IMPLEMENTADO
-        
+        // WHERE ES OPCIONAL
+        //UPDATE $table SET column-name = "value", column-name="value" WHERE column-name = "value"
     }
-    
-    function Delete($args){
+
+    function Delete($args) {
         //TODAVIA NO IMPLEMENTADO
     }
-    
-    function Count($result){
+
+    function Count($result) {
         // TODAVIA NO IMPLEMENTADO
 //        $rows = $result->fetchArray();
 //         if ($rows != false) {
 //            return count($rows);
 //        }
-        
     }
-    /*  
+
+    /*
      * 
      * Chequea que la tabla exista en la bd
      * */
@@ -159,7 +200,6 @@ class DB extends SQLite3 {
             return true;
         }
     }
-
 
     function alert($num, $parametro = "") {
 
@@ -189,11 +229,11 @@ class DB extends SQLite3 {
 
         return $mensaje[$num] . $this->newline;
     }
-    
+
     /**
      * Muestra los nombres de las tablas que existen en la base de datos
      */
-    function showTables(){
+    function showTables() {
         $query = "SELECT name FROM sqlite_master WHERE type='table'";
         $ret = $this->query($query);
         return $ret->fetchArray(SQLITE3_ASSOC);
