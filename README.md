@@ -5,14 +5,16 @@ Sqlite 3 class
 
 Simple to use sqlite3 php class
 
-to use include it like this
-include './sqlite_class.php';
+to use include it like this <br>
+
+<code> include './sqlite_class.php';</code>
 
 
-to create a db 
-$db = new DB("mydb.db"); // you can use txt or db as extension
+to create a db <br>
+<code> $db = new DB("mydb.db"); // you can use txt or db as extension</code>
 
-to create a table use an array here is an example
+to create a table use an array here is an example <br>
+<code>
 $values = array(
     "TABLE" => "jugadores", // table name
     "id" => "INTEGER PRIMARY KEY",
@@ -22,9 +24,9 @@ $values = array(
 );
 
 $db->CreateTable($values);
-
-easily insert data with an array 
-
+</code>
+easily insert data with an array <br>
+<code>
 $fields = array(
     "id" => 1,
     "oro" => 100,
@@ -33,8 +35,9 @@ $fields = array(
 );
 
 $db->Insert("jugadores", $fields); 
-
-selecting data use an array
+</code>
+selecting data use an array <br>
+<code>
 $values = array(
     "ROWS" => "*", //row names
     "TABLE" => "jugadores",
@@ -45,3 +48,4 @@ $rows = $db->Select($values); // here it returns an array with the selected rows
 
 $db->close(); // finally close the database
 
+</code>
